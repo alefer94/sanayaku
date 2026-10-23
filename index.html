@@ -1,9 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SANAYAKU — Sanación ancestral</title>
+<link rel="icon" type="image/png" href="assets/img/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..600&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -66,10 +67,18 @@
 
   /* ---------- NAV ---------- */
   header{
-    position:absolute;
+    position:fixed;
     top:0; left:0; right:0;
-    z-index:10;
-    padding:34px 0 0;
+    z-index:50;
+    padding:28px 0;
+    transition:background .35s ease, padding .35s ease, backdrop-filter .35s ease;
+  }
+  header.scrolled{
+    background:rgba(22,38,30,0.86);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    padding:16px 0;
+    border-bottom:1px solid var(--hairline);
   }
   .nav{
     display:flex;
@@ -462,16 +471,283 @@
   .footer-row a{ color:var(--text-light-dim); border-bottom:1px solid transparent; }
   .footer-row a:hover{ color:var(--gold); border-color:var(--gold); }
   .footer-links{ display:flex; gap:26px; }
+
+  /* ---------- MEDIA ---------- */
+  .hero-media{ position:absolute; inset:0; z-index:0; }
+  .hero-media video, .hero-media img{
+    width:100%; height:100%; object-fit:cover; display:block;
+  }
+  .hero-media::after{
+    content:""; position:absolute; inset:0;
+    background:
+      linear-gradient(90deg, rgba(22,38,30,0.88) 0%, rgba(22,38,30,0.55) 55%, rgba(22,38,30,0.25) 100%),
+      linear-gradient(180deg, rgba(22,38,30,0.45) 0%, transparent 30%, rgba(22,38,30,0.6) 100%);
+  }
+  .hero{ background:var(--bg-deep); }
+  .current-lines{ z-index:1; }
+
+  .collage{
+    display:grid;
+    grid-template-columns:1.2fr 0.8fr;
+    gap:18px;
+    margin-top:56px;
+  }
+  .collage figure{ overflow:hidden; border-radius:2px; position:relative; }
+  .collage img{
+    width:100%; height:100%; object-fit:cover; display:block;
+    transition:transform 1.2s cubic-bezier(.2,.7,.2,1);
+  }
+  .collage figure:hover img{ transform:scale(1.05); }
+  .collage .c-main{ aspect-ratio:4/3; }
+  .collage .c-side{ display:grid; grid-template-rows:1fr 1fr; gap:18px; }
+  @media (max-width:640px){
+    .collage{ grid-template-columns:1fr; }
+    .collage .c-side{ grid-template-rows:none; grid-template-columns:1fr 1fr; }
+    .collage .c-side figure{ aspect-ratio:1; }
+  }
+
+  .band{
+    position:relative;
+    height:62vh; min-height:360px;
+    background-size:cover; background-position:center;
+    background-attachment:fixed;
+    display:flex; align-items:center; justify-content:center;
+    text-align:center; color:var(--text-light);
+  }
+  .band::before{ content:""; position:absolute; inset:0; background:rgba(22,38,30,0.45); }
+  .band blockquote{
+    position:relative; max-width:760px; padding:0 30px;
+    font-family:'Fraunces', serif; font-style:italic; font-weight:400;
+    font-size:clamp(1.5rem,3.4vw,2.5rem); line-height:1.25;
+  }
+  @media (hover:none){ .band{ background-attachment:scroll; } }
+
+  .guide-portrait img{
+    position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+  }
+  .guide-portrait::after{
+    content:""; position:absolute; inset:0;
+    box-shadow:inset 0 0 0 1px rgba(246,241,228,0.25);
+    pointer-events:none;
+  }
+
+  .gallery{ background:var(--bg-sand); padding:120px 0 40px; }
+  .gallery-grid{
+    columns:3; column-gap:16px; margin-top:50px;
+  }
+  @media (max-width:900px){ .gallery-grid{ columns:2; } }
+  @media (max-width:520px){ .gallery-grid{ columns:1; } }
+  .gallery-grid button{
+    display:block; width:100%; margin:0 0 16px; padding:0; border:none;
+    background:none; cursor:zoom-in; overflow:hidden; border-radius:2px;
+    break-inside:avoid; position:relative;
+  }
+  .gallery-grid img{
+    width:100%; display:block;
+    transition:transform .9s cubic-bezier(.2,.7,.2,1), filter .4s ease;
+  }
+  .gallery-grid button:hover img{ transform:scale(1.06); filter:brightness(1.08); }
+
+  .videos{ background:var(--bg-deep); color:var(--text-light); padding:120px 0; }
+  .videos .intro-label{ color:var(--gold); }
+  .videos h2{ font-size:clamp(1.8rem,3vw,2.5rem); font-weight:400; margin-top:14px; max-width:560px; }
+  .video-grid{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-top:56px;
+  }
+  .video-grid .v-feature{ grid-column:span 2; }
+  @media (max-width:860px){
+    .video-grid{ grid-template-columns:1fr 1fr; }
+    .video-grid .v-feature{ grid-column:span 2; }
+  }
+  @media (max-width:520px){
+    .video-grid{ grid-template-columns:1fr; }
+    .video-grid .v-feature{ grid-column:auto; }
+  }
+  .video-card{
+    position:relative; overflow:hidden; border-radius:2px;
+    background:#0d1511; aspect-ratio:16/10;
+    border:1px solid var(--hairline);
+  }
+  .video-card.tall{ aspect-ratio:auto; }
+  .video-card video{ width:100%; height:100%; object-fit:cover; display:block; }
+  .video-card figcaption{
+    position:absolute; left:0; right:0; bottom:0; padding:40px 18px 14px;
+    background:linear-gradient(transparent, rgba(10,16,12,0.85));
+    font-size:0.88rem; color:var(--text-light-dim); pointer-events:none;
+    transition:opacity .3s ease;
+  }
+  .video-card.playing figcaption{ opacity:0; }
+
+  .contact-bg{
+    position:absolute; inset:0; z-index:0;
+    background:url('assets/img/letrero.jpg') center/cover no-repeat;
+    opacity:0.18;
+  }
+  .contact .wrap{ position:relative; z-index:1; }
+
+  /* lightbox */
+  .lightbox{
+    position:fixed; inset:0; z-index:100; background:rgba(10,16,12,0.94);
+    display:none; align-items:center; justify-content:center; padding:30px;
+  }
+  .lightbox.open{ display:flex; animation:fadeIn .3s ease; }
+  .lightbox img{ max-width:100%; max-height:100%; border-radius:2px; box-shadow:0 20px 60px rgba(0,0,0,.6); }
+  .lightbox button{
+    position:absolute; background:none; border:1px solid var(--hairline);
+    color:var(--text-light); width:46px; height:46px; border-radius:50%;
+    font-size:1.3rem; cursor:pointer; transition:background .25s ease, color .25s ease;
+  }
+  .lightbox button:hover{ background:var(--gold); color:var(--bg-deep); }
+  .lb-close{ top:22px; right:22px; }
+  .lb-prev{ left:22px; top:50%; }
+  .lb-next{ right:22px; top:50%; }
+  @keyframes fadeIn{ from{opacity:0} to{opacity:1} }
+
+  /* scroll reveal */
+  .reveal{ opacity:0; transform:translateY(28px); transition:opacity .9s ease, transform .9s cubic-bezier(.2,.7,.2,1); }
+  .reveal.in{ opacity:1; transform:none; }
+  .logo{ display:flex; align-items:center; gap:12px; }
+  .logo img{ height:64px; width:64px; display:block; transition:height .35s ease, width .35s ease; }
+  header.scrolled .logo img{ height:46px; width:46px; }
+  .footer-logo{ display:flex; align-items:center; gap:12px; }
+  .footer-logo img{ height:44px; width:44px; }
+
+  /* ---------- WOW LAYER ---------- */
+  .progress{ position:fixed; top:0; left:0; height:3px; width:0; z-index:200;
+    background:linear-gradient(90deg,var(--river),var(--gold),#F0D9A0); box-shadow:0 0 12px var(--gold); }
+
+  .hero-media video{ transform:none; animation:none; }
+  @keyframes kenburns{ from{ transform:scale(1.04) translate(0,0); } to{ transform:scale(1.16) translate(-1.5%,-1%); } }
+  #fireflies{ position:absolute; inset:0; width:100%; height:100%; z-index:1; pointer-events:none; }
+
+  .hero-mark{
+    position:absolute; right:-6%; top:50%; width:min(62vw,760px); aspect-ratio:1;
+    transform:translateY(-50%); z-index:1; pointer-events:none; opacity:0.16;
+    animation:spinSlow 120s linear infinite;
+  }
+  .hero-mark img{ width:100%; height:100%; display:block; filter:drop-shadow(0 0 40px rgba(201,166,103,.35)); }
+
+  /* payment upload */
+  .upload{ border:1.5px dashed var(--hairline); border-radius:6px; padding:22px; text-align:center; cursor:pointer;
+    transition:border-color .3s ease, background .3s ease; position:relative; }
+  .upload:hover, .upload.drag{ border-color:var(--gold); background:rgba(201,166,103,.08); }
+  .upload input{ position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
+  .upload-ico{ font-size:1.8rem; color:var(--gold); line-height:1; }
+  .upload-txt{ margin-top:8px; font-size:.92rem; color:var(--text-light-dim); }
+  .upload-txt b{ color:var(--gold); font-weight:500; }
+  .upload-hint{ font-size:.78rem; color:var(--text-light-dim); opacity:.7; margin-top:4px; }
+  .upload-preview{ display:none; align-items:center; gap:14px; margin-top:14px; padding:10px; border:1px solid var(--hairline); border-radius:6px; }
+  .upload-preview.show{ display:flex; }
+  .upload-preview img{ width:64px; height:64px; object-fit:cover; border-radius:4px; }
+  .upload-preview .nm{ flex:1; text-align:left; font-size:.88rem; color:var(--text-light); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .upload-preview .nm small{ display:block; color:var(--text-light-dim); }
+  .upload-preview button{ background:none; border:1px solid var(--hairline); color:var(--text-light); width:30px; height:30px; border-radius:50%; cursor:pointer; }
+  .upload-preview button:hover{ background:var(--gold); color:var(--bg-deep); }
+  .form-error{ color:#E8A38B; font-size:.85rem; margin-top:8px; min-height:1.2em; }
+  .submit-btn:disabled{ opacity:.7; cursor:wait; }
+
+  .intro-photo{ margin-top:34px; position:relative; border-radius:2px; box-shadow:0 18px 40px rgba(27,42,34,.28); }
+  .intro-photo::before{ content:""; position:absolute; inset:14px -14px -14px 14px; border:1px solid var(--ochre); border-radius:2px; z-index:0; opacity:.6; }
+  .intro-photo img{ position:relative; z-index:1; width:100%; aspect-ratio:4/3; object-fit:cover; display:block; border-radius:2px; }
+  @media (max-width:860px){ .intro-photo{ max-width:520px; } }
+
+  /* entrance sign */
+  .gate{ background:radial-gradient(ellipse 800px 500px at 20% 30%, rgba(60,110,113,.45), transparent 60%), var(--bg-deep);
+    color:var(--text-light); padding:120px 0; overflow:hidden; }
+  .gate-grid{ display:grid; grid-template-columns:0.9fr 1.1fr; gap:80px; align-items:center; }
+  @media (max-width:860px){ .gate-grid{ grid-template-columns:1fr; gap:44px; } }
+  .gate-photo{ position:relative; aspect-ratio:3/4; max-height:640px; border-radius:200px 200px 4px 4px; overflow:hidden;
+    border:1px solid var(--gold); box-shadow:0 0 0 10px rgba(201,166,103,.08), 0 30px 70px rgba(0,0,0,.55); }
+  .gate-photo img{ width:100%; height:100%; object-fit:cover; display:block; transition:transform 1.4s cubic-bezier(.2,.7,.2,1); }
+  .gate-photo:hover img{ transform:scale(1.06); }
+  .gate-tag{ position:absolute; left:50%; bottom:22px; transform:translateX(-50%); padding:8px 20px; border-radius:30px;
+    background:rgba(22,38,30,.8); backdrop-filter:blur(6px); border:1px solid var(--hairline); font-size:.8rem; letter-spacing:.14em; text-transform:uppercase; color:var(--gold); }
+  .gate-text .intro-label{ color:var(--gold); }
+  .gate-text h2{ font-size:clamp(2.2rem,4.6vw,3.6rem); font-weight:400; margin-top:14px; line-height:1.05; }
+  .gate-text h2 em{ color:var(--gold); font-style:italic; }
+  .gate-text p{ margin-top:22px; color:var(--text-light-dim); max-width:480px; }
+  .success{ display:none; text-align:center; padding:40px 20px; border:1px solid var(--hairline); border-radius:8px;
+    background:rgba(201,166,103,.07); animation:fadeIn .6s ease; }
+  .success.show{ display:block; }
+  .success .check{ width:70px; height:70px; margin:0 auto 20px; border-radius:50%; background:var(--gold); color:var(--bg-deep);
+    display:flex; align-items:center; justify-content:center; font-size:2rem; }
+  .success h3{ font-size:1.6rem; font-weight:400; }
+  .success p{ margin-top:12px; color:var(--text-light-dim); font-size:.95rem; }
+  @keyframes spinSlow{ to{ transform:translateY(-50%) rotate(360deg); } }
+
+  h1.hero-title{ font-size:clamp(2.8rem,7.6vw,6rem); text-shadow:0 4px 40px rgba(0,0,0,.45); }
+  h1.hero-title em{
+    background:linear-gradient(100deg,#F0D9A0,#C9A667 40%,#E8B96B 70%,#F0D9A0);
+    background-size:200% auto; -webkit-background-clip:text; background-clip:text;
+    -webkit-text-fill-color:transparent; animation:shine 6s linear infinite;
+  }
+  @keyframes shine{ to{ background-position:200% center; } }
+
+  .btn-primary{ position:relative; box-shadow:0 0 0 0 rgba(201,166,103,.6); animation:pulse 2.8s infinite; border-radius:40px; padding:16px 36px; }
+  @keyframes pulse{ 70%{ box-shadow:0 0 0 18px rgba(201,166,103,0); } 100%{ box-shadow:0 0 0 0 rgba(201,166,103,0); } }
+  .btn-primary:hover{ box-shadow:0 10px 30px rgba(201,166,103,.45); animation:none; }
+  .submit-btn{ border-radius:40px; padding:16px 38px; }
+
+  .scroll-cue{ position:absolute; left:50%; bottom:52px; transform:translateX(-50%); z-index:3;
+    width:26px; height:44px; border:2px solid rgba(246,241,228,.6); border-radius:20px; }
+  .scroll-cue::after{ content:""; position:absolute; left:50%; top:8px; width:4px; height:8px; margin-left:-2px;
+    background:var(--gold); border-radius:2px; animation:wheel 1.8s infinite; }
+  @keyframes wheel{ 0%{opacity:1;transform:translateY(0)} 100%{opacity:0;transform:translateY(16px)} }
+
+  .stats{ background:var(--bg-deep); color:var(--text-light); padding:70px 0; position:relative; }
+  .stats-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:20px; text-align:center; }
+  @media (max-width:760px){ .stats-grid{ grid-template-columns:1fr 1fr; gap:36px 10px; } }
+  .stat{ position:relative; padding:10px; }
+  .stat + .stat::before{ content:""; position:absolute; left:0; top:15%; height:70%; width:1px; background:var(--hairline); }
+  @media (max-width:760px){ .stat:nth-child(3)::before{ display:none; } }
+  .stat-num{ font-family:'Fraunces',serif; font-size:clamp(2.6rem,5vw,4rem); line-height:1;
+    background:linear-gradient(180deg,#F0D9A0,#B5793B); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+  .stat-label{ margin-top:10px; font-size:.9rem; color:var(--text-light-dim); letter-spacing:.04em; }
+
+  .marquee{ overflow:hidden; background:var(--gold); color:var(--bg-deep); padding:16px 0; white-space:nowrap; }
+  .marquee-track{ display:inline-flex; gap:46px; animation:marq 38s linear infinite; font-family:'Fraunces',serif; font-style:italic; font-size:1.35rem; }
+  .marquee-track span::after{ content:"✦"; margin-left:46px; font-style:normal; font-size:.9rem; opacity:.7; }
+  @keyframes marq{ to{ transform:translateX(-50%); } }
+
+  .service-row{ position:relative; transition:background .4s ease, padding .4s ease; align-items:center; counter-increment:svc; }
+  .services .wrap{ counter-reset:svc; }
+  .service-row::before{ content:"0" counter(svc); position:absolute; left:-4px; top:50%; transform:translateY(-50%);
+    font-family:'Fraunces',serif; font-size:3.4rem; color:rgba(201,166,103,.12); transition:color .4s ease; pointer-events:none; }
+  .service-row .service-name{ transition:transform .4s ease, color .4s ease; }
+  .service-row:hover{ background:linear-gradient(90deg,rgba(201,166,103,.12),transparent 70%); }
+  .service-row:hover::before{ color:rgba(201,166,103,.45); }
+  .service-row:hover .service-name{ transform:translateX(18px); color:var(--gold); }
+  @media (max-width:780px){ .service-row::before{ display:none; } .service-row:hover .service-name{ transform:none; } }
+  .svc-preview{ position:fixed; width:260px; height:180px; z-index:40; pointer-events:none; border-radius:4px; overflow:hidden;
+    opacity:0; transform:scale(.85) rotate(-3deg); transition:opacity .25s ease, transform .25s ease;
+    box-shadow:0 20px 50px rgba(0,0,0,.5); border:1px solid var(--gold); }
+  .svc-preview.on{ opacity:1; transform:scale(1) rotate(-3deg); }
+  .svc-preview img{ width:100%; height:100%; object-fit:cover; }
+  @media (hover:none){ .svc-preview{ display:none; } }
+
+  .gallery-grid button::after{ content:"+"; position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    font-size:3rem; color:#fff; background:linear-gradient(transparent 40%,rgba(22,38,30,.75)); opacity:0; transition:opacity .4s ease; }
+  .gallery-grid button:hover::after{ opacity:1; }
+
+  .collage figure{ box-shadow:0 18px 40px rgba(27,42,34,.25); }
+  .intro-label{ letter-spacing:.14em; text-transform:uppercase; font-style:normal; font-size:.8rem; font-family:'Work Sans',sans-serif; font-weight:500; }
+  .intro-label::before{ content:""; display:inline-block; width:34px; height:1px; background:currentColor; vertical-align:middle; margin-right:12px; opacity:.7; }
+  .voice{ transition:transform .4s ease, border-color .4s ease; }
+  .voice:hover{ transform:translateX(8px); border-color:var(--gold); }
+  .video-card{ transition:transform .4s ease, box-shadow .4s ease; }
+  .video-card:hover{ transform:translateY(-6px); box-shadow:0 24px 50px rgba(0,0,0,.45); }
 </style>
 </head>
 <body>
 
+<div class="progress" id="progress"></div>
 <header>
   <div class="wrap nav">
-    <div class="logo">Sanayaku</div>
+    <a href="#" class="logo" aria-label="Sanayaku, inicio"><img src="assets/img/logo-light.png" alt="Logo de Sanayaku"><span>Sanayaku</span></a>
     <nav class="navlinks">
       <a href="#servicios">Ceremonias</a>
       <a href="#guia">La guía</a>
+      <a href="#galeria">Galería</a>
       <a href="#voces">Testimonios</a>
       <a href="#contacto">Reservar</a>
     </nav>
@@ -480,12 +756,20 @@
 
 <!-- ---------- HERO ---------- -->
 <section class="hero">
+  <div class="hero-media" aria-hidden="true">
+    <video autoplay muted loop playsinline preload="metadata" poster="assets/img/maloka.jpg">
+      <source src="assets/video/video7.mp4" type="video/mp4">
+    </video>
+  </div>
   <svg class="current-lines" viewBox="0 0 600 700" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
     <path d="M-20 90 C160 130, 220 230, 130 330 C40 430, 100 520, 280 560" stroke="#C9A667" stroke-opacity="0.25" stroke-width="1.4"/>
     <path d="M40 40 C220 100, 260 210, 170 300 C80 390, 150 500, 340 540" stroke="#3C6E71" stroke-opacity="0.35" stroke-width="1.4"/>
     <path d="M100 0 C280 60, 300 190, 210 270 C120 350, 200 470, 400 520" stroke="#EAE0C8" stroke-opacity="0.15" stroke-width="1.2"/>
   </svg>
 
+  <canvas id="fireflies" aria-hidden="true"></canvas>
+  <div class="hero-mark" aria-hidden="true"><img src="assets/img/logo-spin.png" alt=""></div>
+  <div class="scroll-cue" aria-hidden="true"></div>
   <div class="wrap hero-inner">
     <div class="kicker">Un espacio de sanación junto al agua</div>
     <h1 class="hero-title">Volver al cauce <em>propio</em> del cuerpo y el espíritu</h1>
@@ -506,6 +790,9 @@
   <div class="wrap intro-grid">
     <div>
       <div class="intro-label">Nuestra raíz</div>
+      <figure class="intro-photo reveal">
+        <img src="assets/img/letrero-casa.jpg" alt="Letrero de Sanayaku y casa iluminada al anochecer" loading="lazy">
+      </figure>
     </div>
     <div>
       <h2>Sanayaku nace de la idea de que el agua no se detiene: encuentra su cauce incluso cuando el camino se cierra.</h2>
@@ -513,7 +800,36 @@
       <p>Cada persona llega con su propia corriente. Nuestro trabajo es ayudar a que fluya.</p>
     </div>
   </div>
+  <div class="wrap">
+    <div class="collage reveal">
+      <figure class="c-main"><img src="assets/img/maloka.jpg" alt="Maloka ceremonial de techo de palma rodeada de selva" loading="lazy"></figure>
+      <div class="c-side">
+        <figure><img src="assets/img/choza.jpg" alt="Choza de palma al atardecer" loading="lazy"></figure>
+        <figure><img src="assets/img/valle.jpg" alt="Valle verde visto desde las alturas" loading="lazy"></figure>
+      </div>
+    </div>
+  </div>
 </section>
+
+<div class="band" style="background-image:url('assets/img/amanecer.jpg')" role="img" aria-label="Amanecer entre la vegetación">
+  <blockquote>El agua no se detiene: encuentra su cauce.</blockquote>
+</div>
+
+<section class="stats" aria-label="Sanayaku en cifras">
+  <div class="wrap stats-grid">
+    <div class="stat reveal"><div class="stat-num"><span data-count="20">0</span>+</div><div class="stat-label">años de trayectoria de los maestros</div></div>
+    <div class="stat reveal"><div class="stat-num"><span data-count="4">0</span></div><div class="stat-label">caminos de encuentro</div></div>
+    <div class="stat reveal"><div class="stat-num"><span data-count="3">0</span></div><div class="stat-label">días de inmersión en el retiro</div></div>
+    <div class="stat reveal"><div class="stat-num">100%</div><div class="stat-label">acompañamiento antes y después</div></div>
+  </div>
+</section>
+
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <span>Sanación ancestral</span><span>Ceremonia</span><span>Temazcal</span><span>Retiro</span><span>Valle Sagrado</span><span>Medicina andino-amazónica</span>
+    <span>Sanación ancestral</span><span>Ceremonia</span><span>Temazcal</span><span>Retiro</span><span>Valle Sagrado</span><span>Medicina andino-amazónica</span>
+  </div>
+</div>
 
 <!-- ---------- SERVICIOS ---------- -->
 <section class="services" id="servicios">
@@ -550,16 +866,76 @@
 <section class="guide" id="guia">
   <div class="wrap guide-grid">
     <div class="guide-portrait">
-      <svg viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <path d="M0 500 C80 380, 40 260, 140 200 C240 140, 260 60, 200 0 L400 0 L400 500 Z" fill="#16261E" opacity="0.25"/>
-        <path d="M0 0 C120 90, 160 180, 100 260 C40 340, 90 430, 220 500 L0 500 Z" fill="#F6F1E4" opacity="0.12"/>
-      </svg>
+      <img src="assets/img/cascada.jpg" alt="Integrante del equipo Sanayaku junto a una cascada" loading="lazy">
     </div>
     <div class="guide-text">
       <div class="intro-label">Quién acompaña</div>
       <h2>Guiado por facilitadores formados en linajes de la selva y la sierra</h2>
       <p>Nuestro equipo trabaja junto a maestros curanderos con más de veinte años de trayectoria, en colaboración con terapeutas que sostienen la integración emocional de cada proceso. Priorizamos la seguridad, el consentimiento informado y el respeto por el ritmo de cada persona.</p>
       <div class="guide-sign">— Equipo Sanayaku</div>
+    </div>
+  </div>
+</section>
+
+<!-- ---------- ENTRADA ---------- -->
+<section class="gate" id="entrada">
+  <div class="wrap gate-grid">
+    <figure class="gate-photo reveal">
+      <img src="assets/img/letrero.jpg" alt="Letras de Sanayaku sobre un muro de roca bajo un cielo nocturno con luna" loading="lazy">
+      <span class="gate-tag">La entrada</span>
+    </figure>
+    <div class="gate-text reveal">
+      <div class="intro-label">Has llegado</div>
+      <h2>Bienvenido a <em>Sanayaku</em></h2>
+      <p>Bajo la luna y entre la selva, el nombre de Sanayaku se alza sobre un muro de roca para recibirte. Aquí comienza el camino hacia el agua, la naturaleza y el silencio.</p>
+      <p>Cada visita se realiza con cita previa, para que te recibamos con el tiempo y el cuidado que mereces.</p>
+      <a href="#contacto" class="btn-primary" style="margin-top:30px">Agenda tu visita</a>
+    </div>
+  </div>
+</section>
+
+<!-- ---------- GALERÍA ---------- -->
+<section class="gallery" id="galeria">
+  <div class="wrap">
+    <div class="intro-label" style="color:var(--river)">El lugar</div>
+    <h2 style="font-size:clamp(1.8rem,3vw,2.5rem);font-weight:400;margin-top:14px;max-width:560px">Un espacio entre montañas, selva y agua</h2>
+    <div class="gallery-grid reveal">
+      <button type="button"><img src="assets/img/cabana.jpg" alt="Cabaña de madera iluminada por el sol" loading="lazy"></button>
+      <button type="button"><img src="assets/img/mirador-gorila.jpg" alt="Gran escultura de gorila en un mirador entre los árboles" loading="lazy"></button>
+      <button type="button"><img src="assets/img/aereo.jpg" alt="Vista aérea del terreno" loading="lazy"></button>
+      <button type="button"><img src="assets/img/luna.jpg" alt="Palmera bajo la luna" loading="lazy"></button>
+      <button type="button"><img src="assets/img/mirador.jpg" alt="Mirador de madera al amanecer" loading="lazy"></button>
+      <button type="button"><img src="assets/img/letrero-noche.jpg" alt="Colinas verdes y selva del valle" loading="lazy"></button>
+      <button type="button"><img src="assets/img/sendero.jpg" alt="Sendero de piedra hacia la cabaña" loading="lazy"></button>
+      <button type="button"><img src="assets/img/camino.jpg" alt="Camino de tierra roja entre la selva" loading="lazy"></button>
+      <button type="button"><img src="assets/img/letrero-casa.jpg" alt="Letrero y casa al anochecer" loading="lazy"></button>
+      <button type="button"><img src="assets/img/atardecer.jpg" alt="Atardecer sobre la selva" loading="lazy"></button>
+    </div>
+  </div>
+</section>
+
+<!-- ---------- VIDEOS ---------- -->
+<section class="videos" id="videos">
+  <div class="wrap">
+    <div class="intro-label">En movimiento</div>
+    <h2>Conoce Sanayaku y cómo se va construyendo</h2>
+    <div class="video-grid reveal">
+      <figure class="video-card v-feature">
+        <video controls preload="none" playsinline poster="assets/video/video1.jpg"><source src="assets/video/video1.mp4" type="video/mp4"></video>
+        <figcaption>Vista aérea del terreno</figcaption>
+      </figure>
+      <figure class="video-card tall" style="grid-row:span 2">
+        <video controls preload="none" playsinline poster="assets/video/video4.jpg"><source src="assets/video/video4.mp4" type="video/mp4"></video>
+        <figcaption>Entre la naturaleza</figcaption>
+      </figure>
+      <figure class="video-card">
+        <video controls preload="none" playsinline poster="assets/video/video5.jpg"><source src="assets/video/video5.mp4" type="video/mp4"></video>
+        <figcaption>Manos a la obra</figcaption>
+      </figure>
+      <figure class="video-card">
+        <video controls preload="none" playsinline poster="assets/video/video2.jpg"><source src="assets/video/video2.mp4" type="video/mp4"></video>
+        <figcaption>Construcción del espacio</figcaption>
+      </figure>
     </div>
   </div>
 </section>
@@ -594,6 +970,7 @@
 
 <!-- ---------- CONTACTO ---------- -->
 <section class="contact" id="contacto">
+  <div class="contact-bg" aria-hidden="true"></div>
   <div class="wrap contact-grid">
     <div class="contact-left">
       <div class="intro-label">Empezar el proceso</div>
@@ -606,7 +983,7 @@
       </div>
     </div>
     <div class="contact-right">
-      <form onsubmit="event.preventDefault();">
+      <form id="reg-form" novalidate>
         <div class="field">
           <label for="nombre">Nombre</label>
           <input id="nombre" type="text" placeholder="¿Cómo te llamas?">
@@ -629,15 +1006,36 @@
           <label for="mensaje">Cuéntanos brevemente qué te trae por aquí</label>
           <textarea id="mensaje" placeholder="Escribe aquí..."></textarea>
         </div>
-        <button type="submit" class="submit-btn">Enviar solicitud</button>
+        <div class="field">
+          <label for="comprobante">Captura del pago realizado</label>
+          <div class="upload" id="upload">
+            <input id="comprobante" type="file" accept="image/*">
+            <div class="upload-ico">↑</div>
+            <div class="upload-txt"><b>Sube tu comprobante</b> o arrástralo aquí</div>
+            <div class="upload-hint">JPG, PNG o WEBP · máximo 5 MB</div>
+          </div>
+          <div class="upload-preview" id="preview">
+            <img alt="Vista previa del comprobante">
+            <div class="nm"><span></span><small></small></div>
+            <button type="button" id="remove-file" aria-label="Quitar archivo">×</button>
+          </div>
+          <div class="form-error" id="form-error" role="alert"></div>
+        </div>
+        <button type="submit" class="submit-btn" id="submit-btn">Enviar solicitud</button>
       </form>
+      <div class="success" id="success" role="status">
+        <div class="check">✓</div>
+        <h3>¡Solicitud recibida!</h3>
+        <p>Gracias, <span id="ok-name"></span>. Revisaremos tu comprobante de pago y te escribiremos a <span id="ok-mail"></span> para coordinar tu entrevista de admisión.</p>
+        <button type="button" class="submit-btn" id="new-req" style="margin-top:26px">Enviar otra solicitud</button>
+      </div>
     </div>
   </div>
 </section>
 
 <footer>
   <div class="wrap footer-row">
-    <div>© 2026 Sanayaku</div>
+    <div class="footer-logo"><img src="assets/img/logo-light.png" alt="Logo de Sanayaku"><span>© 2026 Sanayaku</span></div>
     <div class="footer-links">
       <a href="#servicios">Ceremonias</a>
       <a href="#guia">La guía</a>
@@ -646,5 +1044,148 @@
   </div>
 </footer>
 
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Galería de imágenes">
+  <button class="lb-close" aria-label="Cerrar">×</button>
+  <button class="lb-prev" aria-label="Anterior">‹</button>
+  <img alt="">
+  <button class="lb-next" aria-label="Siguiente">›</button>
+</div>
+
+<script>
+  // sticky header state
+  const hdr = document.querySelector('header');
+  const onScroll = () => hdr.classList.toggle('scrolled', window.scrollY > 60);
+  onScroll(); window.addEventListener('scroll', onScroll, {passive:true});
+
+  // scroll reveal
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+  }), {threshold:0.12});
+  document.querySelectorAll('.reveal, .service-row, .voice').forEach(el => {
+    el.classList.add('reveal'); io.observe(el);
+  });
+
+  // lightbox
+  const lb = document.getElementById('lightbox');
+  const lbImg = lb.querySelector('img');
+  const thumbs = [...document.querySelectorAll('.gallery-grid img')];
+  let cur = 0;
+  const show = i => { cur = (i + thumbs.length) % thumbs.length; lbImg.src = thumbs[cur].src; lbImg.alt = thumbs[cur].alt; };
+  thumbs.forEach((t,i) => t.parentElement.addEventListener('click', () => { show(i); lb.classList.add('open'); }));
+  const close = () => lb.classList.remove('open');
+  lb.querySelector('.lb-close').onclick = close;
+  lb.querySelector('.lb-prev').onclick = () => show(cur - 1);
+  lb.querySelector('.lb-next').onclick = () => show(cur + 1);
+  lb.addEventListener('click', e => { if (e.target === lb) close(); });
+  document.addEventListener('keydown', e => {
+    if (!lb.classList.contains('open')) return;
+    if (e.key === 'Escape') close();
+    if (e.key === 'ArrowLeft') show(cur - 1);
+    if (e.key === 'ArrowRight') show(cur + 1);
+  });
+
+  // progress bar
+  const prog = document.getElementById('progress');
+  window.addEventListener('scroll', () => {
+    const h = document.documentElement.scrollHeight - innerHeight;
+    prog.style.width = (scrollY / h * 100) + '%';
+  }, {passive:true});
+
+  // counters
+  const cio = new IntersectionObserver(es => es.forEach(e => {
+    if (!e.isIntersecting) return;
+    const el = e.target, end = +el.dataset.count, t0 = performance.now();
+    const step = t => { const p = Math.min((t - t0) / 1600, 1); el.textContent = Math.round(end * (1 - Math.pow(1 - p, 3))); if (p < 1) requestAnimationFrame(step); };
+    requestAnimationFrame(step); cio.unobserve(el);
+  }), {threshold:0.6});
+  document.querySelectorAll('[data-count]').forEach(el => cio.observe(el));
+
+  // fireflies
+  (() => {
+    const c = document.getElementById('fireflies'), x = c.getContext('2d');
+    let w, h, ps = [];
+    const size = () => { w = c.width = c.offsetWidth; h = c.height = c.offsetHeight; };
+    size(); addEventListener('resize', size);
+    for (let i = 0; i < 42; i++) ps.push({x:Math.random(), y:Math.random(), r:Math.random()*2+0.8, s:Math.random()*0.0004+0.0001, p:Math.random()*6.28});
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const draw = t => {
+      x.clearRect(0, 0, w, h);
+      ps.forEach(q => {
+        q.y -= q.s; q.x += Math.sin(t/2000 + q.p) * 0.0004;
+        if (q.y < -0.02) { q.y = 1.02; q.x = Math.random(); }
+        const a = 0.35 + 0.65 * Math.abs(Math.sin(t/900 + q.p));
+        const g = x.createRadialGradient(q.x*w, q.y*h, 0, q.x*w, q.y*h, q.r*7);
+        g.addColorStop(0, 'rgba(240,217,160,' + a + ')'); g.addColorStop(1, 'rgba(240,217,160,0)');
+        x.fillStyle = g; x.beginPath(); x.arc(q.x*w, q.y*h, q.r*7, 0, 6.28); x.fill();
+      });
+      if (!reduce) requestAnimationFrame(draw);
+    };
+    requestAnimationFrame(draw);
+  })();
+
+  // service hover preview
+  (() => {
+    const imgs = ['maloka','sendero','choza','amanecer'];
+    const pv = document.createElement('div'); pv.className = 'svc-preview'; pv.innerHTML = '<img alt="">';
+    document.body.appendChild(pv);
+    const pi = pv.querySelector('img');
+    document.querySelectorAll('.service-row').forEach((r, i) => {
+      r.addEventListener('mouseenter', () => { pi.src = 'assets/img/' + imgs[i] + '.jpg'; pv.classList.add('on'); });
+      r.addEventListener('mouseleave', () => pv.classList.remove('on'));
+      r.addEventListener('mousemove', e => { pv.style.left = (e.clientX + 30) + 'px'; pv.style.top = (e.clientY - 90) + 'px'; });
+    });
+  })();
+
+  // payment proof upload + simulated submit
+  (() => {
+    const form = document.getElementById('reg-form'), up = document.getElementById('upload'),
+      file = document.getElementById('comprobante'), pv = document.getElementById('preview'),
+      err = document.getElementById('form-error'), btn = document.getElementById('submit-btn'),
+      ok = document.getElementById('success');
+    const pvImg = pv.querySelector('img'), pvName = pv.querySelector('.nm span'), pvSize = pv.querySelector('small');
+    const clear = () => { file.value = ''; pv.classList.remove('show'); pvImg.removeAttribute('src'); };
+    const take = f => {
+      err.textContent = '';
+      if (!f) return;
+      if (!f.type.startsWith('image/')) { err.textContent = 'El archivo debe ser una imagen.'; clear(); return; }
+      if (f.size > 5 * 1024 * 1024) { err.textContent = 'La imagen supera los 5 MB.'; clear(); return; }
+      pvImg.src = URL.createObjectURL(f); pvName.textContent = f.name;
+      pvSize.textContent = (f.size / 1024).toFixed(0) + ' KB'; pv.classList.add('show');
+    };
+    file.addEventListener('change', () => take(file.files[0]));
+    ['dragenter','dragover'].forEach(ev => up.addEventListener(ev, () => up.classList.add('drag')));
+    ['dragleave','drop'].forEach(ev => up.addEventListener(ev, () => up.classList.remove('drag')));
+    document.getElementById('remove-file').addEventListener('click', clear);
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const name = form.nombre.value.trim(), mail = form.correo.value.trim();
+      if (!name) { err.textContent = 'Escribe tu nombre.'; form.nombre.focus(); return; }
+      if (!/^\S+@\S+\.\S+$/.test(mail)) { err.textContent = 'Escribe un correo válido.'; form.correo.focus(); return; }
+      if (!file.files[0]) { err.textContent = 'Sube la captura de tu pago para continuar.'; return; }
+      err.textContent = ''; btn.disabled = true; btn.textContent = 'Enviando…';
+      setTimeout(() => {
+        document.getElementById('ok-name').textContent = name;
+        document.getElementById('ok-mail').textContent = mail;
+        form.style.display = 'none'; ok.classList.add('show');
+        btn.disabled = false; btn.textContent = 'Enviar solicitud';
+      }, 1400);
+    });
+    document.getElementById('new-req').addEventListener('click', () => {
+      form.reset(); clear(); ok.classList.remove('show'); form.style.display = '';
+    });
+  })();
+
+  // video captions + pause others
+  document.querySelectorAll('.video-card video').forEach(v => {
+    v.addEventListener('play', () => {
+      v.parentElement.classList.add('playing');
+      document.querySelectorAll('.video-card video').forEach(o => { if (o !== v) o.pause(); });
+    });
+    v.addEventListener('pause', () => v.parentElement.classList.remove('playing'));
+  });
+</script>
+
 </body>
 </html>
+
+
